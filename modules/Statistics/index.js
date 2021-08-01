@@ -6,8 +6,21 @@ const statisticsResolvers = {
   Query: {
     getStatistics: async () => {
       const data = await fetch('https://dekontaminasi.com/api/id/covid19/stats').then((res) => res.json());
-      return data;
+      return {
+        ...data,
+        timestamp: new Date(data.timestamp).toISOString(),
+      };
     },
+    getStatisticsByRegion: async (_, { region }) => {
+      const data = await fetch('https://dekontaminasi.com/api/id/covid19/stats').then((res) => res.json());
+      const regions = data.regions;
+      return regions.find((item) => item.name === region);
+    },
+    getRegions: async () => {
+      const data = await fetch('https://dekontaminasi.com/api/id/covid19/stats').then((res) => res.json());
+      const regions = data.regions;
+      return regions.map((item) => item.name);
+    }
   },
 }
 
@@ -18,11 +31,13 @@ const statisticsModule = createModule({
     gql`
       extend type Query {
         getStatistics: Statistics
+        getStatisticsByRegion(region: String): StatisticsRegion
+        getRegions: [String]
       }
       type Statistics {
         numbers: StatisticsNumber
-        timestamp: Float
-        regions: StatisticsRegion
+        timestamp: String
+        regions: [StatisticsRegion]
       }
       type StatisticsNumber {
         fatal: Int
