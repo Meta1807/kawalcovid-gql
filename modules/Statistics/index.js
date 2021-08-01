@@ -1,22 +1,28 @@
-const { gql } = require('apollo-server');
-const { createModule } = require('graphql-modules');
-const fetch = require('node-fetch');
+import { gql } from 'apollo-server';
+import { createModule } from 'graphql-modules';
+import fetch from 'node-fetch';
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const statisticsResolvers = {
   Query: {
-    getStatistics: async () => {
+    statistics: async () => {
       const data = await fetch('https://dekontaminasi.com/api/id/covid19/stats').then((res) => res.json());
       return {
         ...data,
         timestamp: new Date(data.timestamp).toISOString(),
       };
     },
-    getStatisticsByRegion: async (_, { region }) => {
+    statisticsByRegion: async (_, { region }) => {
       const data = await fetch('https://dekontaminasi.com/api/id/covid19/stats').then((res) => res.json());
       const regions = data.regions;
       return regions.find((item) => item.name === region);
     },
-    getRegions: async () => {
+    regions: async () => {
       const data = await fetch('https://dekontaminasi.com/api/id/covid19/stats').then((res) => res.json());
       const regions = data.regions;
       return regions.map((item) => item.name);
@@ -30,9 +36,9 @@ const statisticsModule = createModule({
   typeDefs: [
     gql`
       extend type Query {
-        getStatistics: Statistics
-        getStatisticsByRegion(region: String): StatisticsRegion
-        getRegions: [String]
+        statistics: Statistics
+        statisticsByRegion(region: String): StatisticsRegion
+        regions: [String]
       }
       type Statistics {
         numbers: StatisticsNumber
@@ -53,4 +59,4 @@ const statisticsModule = createModule({
   resolvers: [statisticsResolvers]
 });
 
-module.exports = statisticsModule;
+export default statisticsModule;

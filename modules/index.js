@@ -1,8 +1,11 @@
-const { createApplication } = require('graphql-modules');
+import { createApplication } from 'graphql-modules';
 
-const vaccinationsModule = require('./Vaccinations');
-const statisticsModule = require('./Statistics');
+import vaccinationsModule from './vaccinations';
+import statisticsModule from './statistics';
 
-module.exports = createApplication({
-  modules: [vaccinationsModule, statisticsModule],
-})
+export default createApplication({
+  modules: [
+    vaccinationsModule,
+    statisticsModule
+  ],
+});

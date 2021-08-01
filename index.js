@@ -1,6 +1,5 @@
-const { ApolloServer, gql } = require('apollo-server');
-const fetch = require('node-fetch');
-const application = require('./modules');
+import { ApolloServer, gql } from 'apollo-server';
+import application from './modules/index.js';
 
 const schema = application.createSchemaForApollo();
 const server = new ApolloServer({ schema });

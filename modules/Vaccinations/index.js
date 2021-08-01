@@ -1,10 +1,16 @@
-const { gql } = require('apollo-server');
-const { createModule } = require('graphql-modules');
-const fetch = require('node-fetch');
+import { gql } from 'apollo-server';
+import { createModule } from 'graphql-modules';
+import fetch from 'node-fetch';
 
-const VaccinationResolver = {
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const vaccinationResolvers = {
   Query: {
-    getVaccinationData: async () => {
+    vaccinationData: async () => {
       const data = await fetch('https://cekdiri.id/vaksinasi/').then((res) => res.json());
       return data;
     },
@@ -17,7 +23,7 @@ const vaccinationModule = createModule({
   typeDefs: [
     gql`
       type Query {
-        getVaccinationData: VaccinationData
+        vaccinationData: VaccinationData
       }
       type VaccinationStage {
         sudah_vaksin1: Int
@@ -63,7 +69,7 @@ const vaccinationModule = createModule({
       }
     `,
   ],
-  resolvers: [VaccinationResolver]
+  resolvers: [vaccinationResolvers]
 });
 
-module.exports = vaccinationModule;
+export default vaccinationModule;
