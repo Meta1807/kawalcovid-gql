@@ -1,6 +1,6 @@
 FROM node:14.16-alpine
 
-WORKDIR /app/covid-graphql
+WORKDIR /app/
 
 ENV PATH /app/node_modules/.bin:$PATH
 
