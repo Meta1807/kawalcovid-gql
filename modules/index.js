@@ -1,6 +1,8 @@
 const { createApplication } = require('graphql-modules');
-const VaccinationsModule = require('./Vaccinations');
+
+const vaccinationsModule = require('./Vaccinations');
+const statisticsModule = require('./Statistics');
 
 module.exports = createApplication({
-  modules: [VaccinationsModule],
+  modules: [vaccinationsModule, statisticsModule],
 })
